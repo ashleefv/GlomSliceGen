@@ -1,6 +1,6 @@
 # GlomSliceGen
 
-
+[![DOI](https://zenodo.org/badge/318237854.svg)](https://zenodo.org/badge/latestdoi/318237854)
 
 ## Overview
 This simulation showcases using procedural generation to create geometry of slices of glomeruli. This repository archives the code presented in Chapter 4 of the PhD thesis "Tools to Accelerate and Advance Modeling Disease Progression" by Steve M. Ruggiero. The repo contains a CompuCell3D simuation that produces glomerular geometry with a parameterized algorithm.
