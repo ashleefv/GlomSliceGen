@@ -1,0 +1,9 @@
+Target Variable = numCapillaries
+Variable Values = [ 1, 2, 3, 4, 5]
+Number of Runs = 1
+trial 1, average, standard deviation
+1.0,1.0,0.0,
+1.0,1.0,0.0,
+1.0,1.0,0.0,
+1.0,1.0,0.0,
+0.979591836735,0.979591836735,0.0,

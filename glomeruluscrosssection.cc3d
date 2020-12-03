@@ -1,0 +1,7 @@
+<Simulation version="3.6.2">
+   <XMLScript Type="XMLScript">Simulation/glomeruluscrosssection.xml</XMLScript>
+   <PythonScript Type="PythonScript">Simulation/glomeruluscrosssection.py</PythonScript>
+   <Resource Type="Python">Simulation/CellGeom.py</Resource>
+   <Resource Type="Python">Simulation/Circle.py</Resource>
+   <Resource Type="Python">Simulation/glomeruluscrosssectionSteppables.py</Resource>
+</Simulation>

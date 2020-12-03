@@ -1,0 +1,74 @@
+
+import sys
+from os import environ
+from os import getcwd
+import string
+
+
+sys.path.append(environ["PYTHON_MODULE_PATH"])
+
+
+import CompuCellSetup
+
+
+sim,simthread = CompuCellSetup.getCoreSimulationObjects()
+        
+# add extra attributes here
+
+        
+CompuCellSetup.initializeSimulationObjects(sim,simthread)
+# Definitions of additional Python-managed fields go here
+        
+#Add Python steppables here
+steppableRegistry=CompuCellSetup.getSteppableRegistry()
+        
+
+from glomeruluscrosssectionSteppables import ConstraintInitializerSteppable
+ConstraintInitializerSteppableInstance=ConstraintInitializerSteppable(sim,_frequency=1)
+steppableRegistry.registerSteppable(ConstraintInitializerSteppableInstance)
+        
+
+from glomeruluscrosssectionSteppables import GrowthSteppable
+GrowthSteppableInstance=GrowthSteppable(sim,_frequency=50)
+steppableRegistry.registerSteppable(GrowthSteppableInstance)
+        
+
+from glomeruluscrosssectionSteppables import CellInitializer
+instanceOfCellInitializer=CellInitializer(_simulator=sim,_frequency=1)
+steppableRegistry.registerSteppable(instanceOfCellInitializer)
+
+from glomeruluscrosssectionSteppables import MitosisSteppable
+MitosisSteppableInstance=MitosisSteppable(sim,_frequency=1)
+steppableRegistry.registerSteppable(MitosisSteppableInstance)
+        
+from glomeruluscrosssectionSteppables import DeathSteppable
+DeathSteppableInstance=DeathSteppable(sim,_frequency=1)
+steppableRegistry.registerSteppable(DeathSteppableInstance)
+
+
+from glomeruluscrosssectionSteppables import LoggingSteppable
+instanceOfLoggingSteppable=LoggingSteppable(_simulator=sim,_frequency=1)
+steppableRegistry.registerSteppable(instanceOfLoggingSteppable)
+
+if "injectors_WA" in globals():
+    for func in injectors_WA:
+        func(_i_WA)
+                
+
+
+from glomeruluscrosssectionSteppables import fppLinkTracker
+instanceOffppLinkTracker=fppLinkTracker(_simulator=sim,_frequency=10)
+steppableRegistry.registerSteppable(instanceOffppLinkTracker)
+
+if "output_WA" in globals():
+    print "indicies: ", _i_WA, _j_WA
+    instanceOffppLinkTracker.output_WA = output_WA
+    instanceOffppLinkTracker._i_WA = _i_WA
+    instanceOffppLinkTracker._j_WA = _j_WA
+    instanceOffppLinkTracker.CC3DoutputDir_WA = CC3DoutputDir_WA
+    print instanceOffppLinkTracker._i_WA, instanceOffppLinkTracker._j_WA
+    
+
+CompuCellSetup.mainLoop(sim,simthread,steppableRegistry)
+        
+        

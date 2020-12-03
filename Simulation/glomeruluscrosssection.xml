@@ -1,0 +1,164 @@
+<CompuCell3D Revision="20170723" Version="3.7.6">
+   <Metadata>
+      <DebugOutputFrequency>1000</DebugOutputFrequency>
+   </Metadata>
+
+   <Potts>
+      
+      <!-- Basic properties of CPM (GGH) algorithm -->
+      <Dimensions x="100" y="100" z="1"/>
+      <Steps>1000</Steps>
+      <Temperature>1.0</Temperature>
+      <NeighborOrder>1</NeighborOrder>
+   </Potts>
+   
+   <Plugin Name="CellType">
+      
+      <!-- Listing all cell types in the simulation -->
+      <CellType TypeId="0" TypeName="Medium"/>
+      <CellType TypeId="1" TypeName="Mesangial"/>
+      <CellType TypeId="2" TypeName="PodocyteBody"/>
+      <CellType TypeId="3" TypeName="PodocyteFoot"/>
+      <CellType TypeId="4" TypeName="Capillary"/>
+   </Plugin>
+   
+   <Plugin Name="Volume"/>
+   
+   <Plugin Name="Surface"/>
+   
+   <Plugin Name="CenterOfMass">
+      
+      <!-- Module tracking center of mass of each cell -->
+   </Plugin>
+   
+   <Plugin Name="Connectivity">
+   <!-- Connectivity constraint applied to each cell. Energy penalty specifies how strong the constraint is. Penalty is specified globally for each cell  -->
+   <!-- This constraint works in 2D and on square lattice only! It also requires that the <NeighborOrder> in the Potts section is 1 or 2! -->
+   <!-- For more flexible version of this plugin use ConnectivityLocalFlex where constraint penalty is specified for each cell individually using Python scripting using the following syntax -->
+   <!-- self.connectivityLocalFlexPlugin.setConnectivityStrength(cell,10000000) -->
+   <Penalty>10000000</Penalty>
+   </Plugin>
+
+   
+   <Plugin Name="Contact">
+      <!-- Specification of adhesion energies -->
+      <Energy Type1="Medium" Type2="Medium">10.0</Energy>
+      <Energy Type1="Medium" Type2="Mesangial">10.0</Energy>
+      <Energy Type1="Medium" Type2="PodocyteBody">5.0</Energy>
+      <Energy Type1="Medium" Type2="PodocyteFoot">10.0</Energy>
+      <Energy Type1="Medium" Type2="Capillary">10.0</Energy>
+      <Energy Type1="Mesangial" Type2="Mesangial">10.0</Energy>
+      <Energy Type1="Mesangial" Type2="PodocyteBody">15.0</Energy>
+      <Energy Type1="Mesangial" Type2="PodocyteFoot">7.0</Energy>
+      <Energy Type1="Mesangial" Type2="Capillary">8.0</Energy>
+      <Energy Type1="PodocyteBody" Type2="PodocyteBody">15.0</Energy>
+      <Energy Type1="PodocyteBody" Type2="PodocyteFoot">15.0</Energy>
+      <Energy Type1="PodocyteBody" Type2="Capillary">15.0</Energy>
+      <Energy Type1="PodocyteFoot" Type2="PodocyteFoot">7.0</Energy>
+      <Energy Type1="PodocyteFoot" Type2="Capillary">8.0</Energy>
+      <Energy Type1="Capillary" Type2="Capillary">10.0</Energy>
+      <NeighborOrder>2</NeighborOrder>
+   </Plugin>
+   
+   <Plugin Name="ContactInternal">
+   <!-- Specification of internal adhesion energies -->
+      <Energy Type1="Mesangial" Type2="Mesangial">10.0</Energy>
+      <Energy Type1="Mesangial" Type2="PodocyteBody">10.0</Energy>
+      <Energy Type1="Mesangial" Type2="PodocyteFoot">10.0</Energy>
+      <Energy Type1="Mesangial" Type2="Capillary">10.0</Energy>
+      <Energy Type1="PodocyteBody" Type2="PodocyteBody">10.0</Energy>
+      <Energy Type1="PodocyteBody" Type2="PodocyteFoot">3.0</Energy>
+      <Energy Type1="PodocyteBody" Type2="Capillary">10.0</Energy>
+      <Energy Type1="PodocyteFoot" Type2="PodocyteFoot">10.0</Energy>
+      <Energy Type1="PodocyteFoot" Type2="Capillary">10.0</Energy>
+      <Energy Type1="Capillary" Type2="Capillary">10.0</Energy>
+      <NeighborOrder>2</NeighborOrder>
+   </Plugin>
+
+   
+   <Plugin Name="LengthConstraint">
+   
+   <!-- Applies elongation constraint to each cell. Users specify target length of major axis -TargetLength (in 3D additionally, target length of minor axis - MinorTargetLength) and a strength of the constraint -LambdaLength. Parameters are specified for each cell type -->
+   <!-- IMPORTANT: To prevent cell fragmentation for large elongations you need to also use connectivity constraint -->
+   <!-- LengthConstraint plugin with no body: <Plugin Name="LengthConstraint"/> permits constraint specification for individual cells -->
+   <!-- Comment out the constrains for cell types which don't need them -->
+      <!-- <LengthEnergyParameters CellType="Mesangial" LambdaLength="2.0" TargetLength="25"/> -->
+      <LengthEnergyParameters CellType="PodocyteFoot" LambdaLength="2.0" TargetLength="13"/>
+      <!-- <LengthEnergyParameters CellType="Capillary" LambdaLength="2.0" TargetLength="25"/> -->
+   </Plugin>
+
+   
+   <Plugin Name="NeighborTracker">
+   
+   <!-- Module tracking neighboring cells of each cell -->
+   </Plugin>
+   
+   <Plugin Name="PixelTracker">
+   
+   <!-- Module tracking pixels of each cell -->
+   </Plugin>
+   
+   <Plugin Name="BoundaryPixelTracker">
+   
+   <!-- Module tracking boundary pixels of each cell -->
+   <NeighborOrder>1</NeighborOrder>
+   </Plugin>
+
+
+   
+   <Plugin Name="FocalPointPlasticity">
+   
+   <!-- Specification of focal point junctions -->
+   <!-- We separetely specify links between members of same cluster - InternalParameters and members of different clusters Parameters. When not using compartmental  cells comment out InternalParameters specification -->
+   <!-- To modify FPP links individually for each cell pair uncomment line below -->
+   <!-- <Local/> -->
+   <!-- Note that even though you may manipulate lambdaDistance, targetDistance and maxDistance using Python you still need to set activation energy from XML level -->
+   <!-- See CC3D manual for details on FPP plugin  -->
+   
+
+   
+      <Parameters Type1="PodocyteBody" Type2="PodocyteBody">
+         <Lambda>10</Lambda>
+         <ActivationEnergy>-50</ActivationEnergy>
+         <TargetDistance>6</TargetDistance>
+         <MaxDistance>25</MaxDistance>
+<!--       <MaxNumberOfJunctions>2</MaxNumberOfJunctions> -->
+         <MaxNumberOfJunctions NeighborOrder="1">2</MaxNumberOfJunctions>
+      </Parameters>
+   
+   
+   
+      <NeighborOrder>1</NeighborOrder>
+   </Plugin>
+
+   
+   <Steppable Type="BoxWatcher">
+      
+      <!-- Module tracing boundaries of the minimal box enclosing all the cells. May speed up calculations. May have no effect for parallel version -->
+      <XMargin>5</XMargin>
+      <YMargin>5</YMargin>
+      <ZMargin>5</ZMargin>
+   </Steppable>
+   
+<!--    <Steppable Type="BlobInitializer"> -->
+      
+      <!-- Initial layout of cells in the form of spherical (circular in 2D) blob --> 
+      
+      
+<!--       <Region> -->
+<!--          <Center x="50" y="50" z="0"/> -->
+<!--          <Radius>25</Radius> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>5</Width> -->
+<!--          <Types>Podocyte</Types> -->
+<!--       </Region> -->
+      
+<!--       <Region> -->
+<!--          <Center x="50" y="50" z="0"/> -->
+<!--          <Radius>20</Radius> -->
+<!--          <Gap>0</Gap> -->
+<!--          <Width>5</Width> -->
+<!--          <Types>Mesangial</Types> -->
+<!--       </Region> -->
+<!--    </Steppable> -->
+</CompuCell3D>

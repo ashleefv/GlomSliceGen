@@ -1,0 +1,65 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+\begin{document}
+
+	Data for the diameter of glomerular capillaries were not available but can be calculated from the total capillary length and total capillary surface for the entire glomerulus. Assuming that the capillaries can be approximated by cylinders, the equation for the surface area of the rounded face of a cylinder can be rearranged to solve for the diameter \eqref{cyl-dia}.
+	
+	\begin{equation}\label{cyl-dia}
+		D = \frac{A_{surface}}{\pi L}
+	\end{equation}
+			
+	Similarly, limited data for the geometry of the podocytes is available. While data for the volumes are available, the cross section area is needed. Assuming the glomerulus and podocytes are approximated by spheres, the equation for the volume of a sphere can be solved for the diameter. With a diameter, calculation of the cross section is simple.
+	
+	\begin{equation}\label{sph-dia}
+		D = \frac{3}{\pi 2}V^{1/3}
+	\end{equation}
+	
+\begin{table}[htbp]
+\caption{Calculated geometries}
+	\begin{center}
+		\begin{tabular}{@{}c|cc@{}}
+			Parameter & Value & Units \\ \midrule
+			Capillary Diameter & 0.0100 & mm\\
+			Podocyte Area & 0.284 & mm$^2$ \\
+			Glomerular Diameter & 0.0640 & mm\\
+			
+		\end{tabular}
+	\end{center}
+\label{Approach2}
+\end{table}
+	
+	In Compucell3D, a podocyte cell volume of 25 was taken as a basis. Since the simulation is two-dimensional, the volume is equivalent to the cross section area. The volume for the capillaries and the width of the glomerulus were scaled proportionately based on the calculated values.
+	
+\begin{table}[htbp]
+\caption{Calculated geometries}
+	\begin{center}
+		\begin{tabular}{@{}c|c@{}}
+			Parameter & Value \\ \midrule
+			Capillary Volume & 70 \\
+			Glomerular Diameter & 58 \\
+			
+		\end{tabular}
+	\end{center}
+\label{Approach2}
+\end{table}
+	
+%	Kikuchi
+%		got podocyte volume
+%		got tuft volume
+%		assume both can be approximated by spheres
+%			use geometry to back calculate a diameter and cross section area
+			
+%	CC3D parameters
+%		took podocyte volume of 25 as a basis
+%			Since this is a 2D simulation, volume=area (z = 1)
+%		took cell width of 5 as a basis
+		
+%		calculated a relative capillary area of 70
+		
+%		calculated a relative glomerulus diameter of 58
+
+
+\end{document}
